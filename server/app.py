@@ -6,7 +6,7 @@ from server.routes.client import router as ClientRouter
 app.include_router(ClientRouter, tags=["Client"], prefix="/client")
 
 
-@app.get("/")
+@app.get("/", tags=["Home"])
 def home():
     return {"message": "Bots Fusion AI"}
 
