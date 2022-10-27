@@ -18,7 +18,7 @@
 5. ### DELETE
    - `client/{client_id}` - Delete data of client with `client_id` from the database.
 
-- check [postman_collection.json](https://github.com/J0SAL/ibm-rush-estimator/edit/main/fastapi.postman_collection.json) for more details
+- check [postman_collection.json](https://github.com/J0SAL/bots-fusion-ai/blob/main/fastapi.postman_collection.json) for more details
 
 ## :runner: Local setup - Backend
 
