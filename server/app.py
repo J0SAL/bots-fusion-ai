@@ -1,9 +1,13 @@
 from fastapi import FastAPI
 app = FastAPI()
 
+from server.routes.client import router as ClientRouter
+
+app.include_router(ClientRouter, tags=["Client"], prefix="/client")
+
+
 @app.get("/")
 def home():
-    return {"message": "Hello World"}
+    return {"message": "Bots Fusion AI"}
 
-from server.routes.client import *
 # app.include_router(client.router)
