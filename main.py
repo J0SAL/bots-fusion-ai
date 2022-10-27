@@ -46,12 +46,15 @@ def client_helper(client) -> dict:
     }
 
 @app.get("/")
-def read_clients():
-    return {"Hello": []}
+async def read_clients():
+    clients_data = await db["clients"].find().to_list(1000)
+    clients = [client_helper(client) for client in clients_data]
+    return JSONResponse(status_code=status.HTTP_200_OK, content=clients)
 
 @app.get("/client/{client_id}")
-def read_client(client_id: int):
-    return {"client": clients[client_id]}
+async def read_client(client_id: str):
+    client = await db["clients"].find_one({"_id": ObjectId(client_id)})
+    return JSONResponse(status_code=status.HTTP_200_OK, content=client_helper(client))
 
 @app.post("/")
 async def add_client(client: Client):
