@@ -65,9 +65,17 @@ async def add_client(client: Client):
     return JSONResponse(status_code=status.HTTP_201_CREATED, content=client_helper(created_clinet))
 
 @app.put("/client/{client_id}")
-def update_client(client: Client, client_id: int):
-    return {"Put": client}
+async def update_client(client: UpdateClient, client_id: str):
+    client = {k: v for k, v in client.dict().items() if v is not None}
+    if len(client) >= 1:
+        update_result = await db["clients"].update_one({"_id": ObjectId(client_id)}, {"$set": client})
+        updated_client = await db["clients"].find_one({"_id": ObjectId(client_id)})
+        return JSONResponse(status_code=status.HTTP_200_OK, content=client_helper(updated_client))
+    return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"message": "No data to update"})
 
 @app.delete("/client/{client_id}")
-def delete_client(client_id: int):
-    return {"Delete": clients[client_id]}
+async def delete_client(client_id: str):
+    res = await db["clients"].delete_one({"_id": ObjectId(client_id)})
+    if res.deleted_count == 1:
+        return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "Client deleted successfully"})
+    return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"message": "Client not found"})
